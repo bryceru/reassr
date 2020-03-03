@@ -1,20 +1,22 @@
 import { Router } from 'express';
 
+import { getList } from './api/serverTodo';
+
 export const todoRoutes = () => {
   const todoRoutes = new Router();
-  const todos = [{ id: 1, text: 'server-fetched todo' }];
 
   todoRoutes.get('/api/todos', (_req, res) => {
-    setTimeout(() => {
-      res.json(todos);
-    }, 300);
+    getList().then(function(list) {
+      console.log('prmoised list', list);
+      res.json(list);
+    });
   });
 
   todoRoutes.post('/api/todos', (req, res) => {
     const newTodo = req.body;
     newTodo.id = Date.now();
 
-    todos.push(newTodo);
+    //todos.push(newTodo); //TODO
 
     setTimeout(() => {
       res.json(newTodo);

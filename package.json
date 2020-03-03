@@ -1,6 +1,6 @@
 {
-  "name": "react-ssr-boilerplate",
-  "version": "5.1.0",
+  "name": "Reassr",
+  "version": "0.0.1",
   "private": true,
   "engines": {
     "node": ">=10.15"
@@ -84,9 +84,13 @@
     "react-dom": "^16.9.0",
     "react-helmet": "^5.2.1",
     "react-loadable": "^5.5.0",
+    "react-redux": "^7.2.0",
     "react-router-dom": "^5.0.1",
     "react-ssr-prepass": "^1.0.6",
     "react-test-renderer": "^16.9.0",
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
     "response-time": "^2.3.2",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.0",
@@ -96,5 +100,9 @@
     "webpack-hot-middleware": "^2.25.0",
     "webpack-manifest-plugin": "^2.0.4",
     "webpack-node-externals": "^1.7.2"
-  }
+  },
+  "description": "Yet Another React Redux SSR Boilerplate",
+  "main": "index.js",
+  "author": "Vladimir Alekseev <v.alekseev@bryce.ru>",
+  "license": "MIT"
 }

@@ -9,31 +9,45 @@ import App from '../src/components/App';
 import { fetchDataForRender } from './fetchDataForRender';
 import { indexHtml } from './indexHtml';
 import stats from '../build/react-loadable.json';
-import { ServerDataProvider } from '../src/state/serverDataContext';
 
-const ServerApp = ({ context, data, location }) => {
+import { Provider } from 'react-redux';
+import { getStore } from '../src/store';
+
+const ServerApp = ({ context, location }) => {
+  const store = getStore();
+  console.log('SERVERAPP', store);
+
   return (
-    <ServerDataProvider value={data}>
+    <Provider store={store}>
       <StaticRouter location={location} context={context}>
         <App />
       </StaticRouter>
-    </ServerDataProvider>
+    </Provider>
   );
 };
 
 export const renderServerSideApp = (req, res) => {
+  const store = getStore();
+
+  console.log('RENDERSERVERSIDEAPP', store);
+
   Loadable.preloadAll()
-    .then(() => fetchDataForRender(ServerApp, req))
-    .then(data => renderApp(ServerApp, data, req, res));
+    .then(() => fetchDataForRender(ServerApp, req, store))
+    .then(a => {
+      console.log('LOADABLE', a);
+      return renderApp(ServerApp, req, res, store);
+    });
 };
 
-function renderApp(ServerApp, data, req, res) {
+function renderApp(ServerApp, req, res, store) {
   const context = {};
   const modules = [];
 
+  console.log('RENDERAPP', store);
+
   const markup = ReactDOMServer.renderToString(
     <Loadable.Capture report={moduleName => modules.push(moduleName)}>
-      <ServerApp location={req.url} data={data} context={context} />
+      <ServerApp location={req.url} context={context} store={store} />
     </Loadable.Capture>
   );
 
@@ -42,7 +56,7 @@ function renderApp(ServerApp, data, req, res) {
   } else {
     const fullMarkup = indexHtml({
       helmet: Helmet.renderStatic(),
-      serverData: data,
+      serverData: store.getState(),
       bundles: getBundles(stats, modules),
       markup
     });

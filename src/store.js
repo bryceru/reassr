@@ -10,6 +10,7 @@ if (typeof window != 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)
   composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 
 // export const history = createHistory({ basename: '/crm' }); //TODO
+// export const history = createHistory(); //TODO
 
 export const getStore = (preloadedState = {}) => {
   const loggerMware = createLogger();
@@ -30,7 +31,3 @@ export const getStore = (preloadedState = {}) => {
     composeEnhancers(applyMiddleware(...middleware))
   );
 };
-
-// const store = getStore();
-//
-// export default store;

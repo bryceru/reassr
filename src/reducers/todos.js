@@ -9,9 +9,6 @@ const assignTodos = (state, data) =>
   });
 
 export default function todosReducer(state = initialState, action) {
-  console.log('todos reducer');
-  console.log(action);
-  console.log(state);
   switch (action.type) {
     case 'GET_TODOS_LIST_SUCCESS':
       console.log('calls GET_TODOS_LIST_SUCCESS', action.list);

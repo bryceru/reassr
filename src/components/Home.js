@@ -1,59 +1,99 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import { api } from '../api';
-import { useServerData } from '../state/serverDataContext';
+import { getList } from '../../server/api/serverTodo';
+// import * as TODOS_CONST from '../state/serverDataContext';
 
-const Home = () => {
-  const serverTodos = useServerData(data => {
-    return data.todos || [];
-  });
-  const [text, setText] = useState('');
-  const [todos, setTodos] = useState(serverTodos);
+class Home extends Component {
+  constructor(props, ctx) {
+    super(props);
 
-  return (
-    <div>
-      <h1>Home page</h1>
+    this.state = {
+      list: props.list || [],
+      text: ''
+    };
+  }
 
-      <form
-        onSubmit={e => {
-          e.preventDefault();
+  componentDidMount() {
+    console.log('did mount', this.props.list.length);
 
-          const newTodo = {
-            text
-          };
+    if (!this.props.list.length) api.todos.all();
+  }
 
-          api.todos.create(newTodo).then(res => {
-            setTodos([...todos, res]);
-            setText('');
-          });
-        }}
-      >
-        <label htmlFor="todo">Add a todo</label>
-        <br />
-        <input
-          id="todo"
-          type="text"
-          value={text}
-          autoComplete="off"
-          onChange={e => setText(e.target.value)}
-        />
-      </form>
+  render() {
+    const { text, list = [] } = this.state;
+    const { listGetting = false } = this.props;
 
-      <ul>
-        {todos.map(todo => (
-          <li key={todo.id}>{todo.text}</li>
-        ))}
-      </ul>
-    </div>
-  );
-};
+    console.log('render', list);
 
-Home.fetchData = () => {
-  return api.todos.all().then(todos => {
+    return (
+      <div>
+        <h1>Home page</h1>
+
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+
+            const newTodo = {
+              text
+            };
+
+            api.todos.create(newTodo).then(res => {
+              this.setState({
+                list: [...list, res],
+                text: ''
+              });
+            });
+          }}
+        >
+          <label htmlFor="todo">Add a todo</label>
+          <br />
+          <input
+            id="todo"
+            type="text"
+            value={text}
+            autoComplete="off"
+            onChange={e =>
+              this.setState({
+                text: e.target.value
+              })
+            }
+          />
+        </form>
+
+        <ul>
+          {list.map(todo => (
+            <li key={todo.id}>{todo.text}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+}
+
+Home.fetchData = store => {
+  console.log('BEFORE FETCH DATA', store);
+
+  return getList().then(list => {
+    console.log('fetch data', list);
+
+    store.dispatch({ type: 'GET_TODOS_LIST_SUCCESS', list });
+
     return {
-      todos
+      list
     };
   });
 };
 
-export default Home;
+const mapStateToProps = state => {
+  console.log('mapStateToProps', state.todos);
+  return {
+    list: state.todos.list,
+    listGetting: state.todos.isGetting
+  };
+};
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

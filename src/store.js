@@ -5,19 +5,17 @@ import { routerMiddleware } from 'react-router-redux';
 import rootReducer from './reducers';
 import { createBrowserHistory as createHistory } from 'history';
 
+let history;
+
 let composeEnhancers = compose;
 if (typeof window != 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)
   composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 
-// export const history = createHistory({ basename: '/crm' }); //TODO
-// export const history = createHistory(); //TODO
+if (typeof window != 'undefined') history = createHistory();
 
 export const getStore = (preloadedState = {}) => {
   const loggerMware = createLogger();
-  // Build the middleware for intercepting and dispatching navigation actions
-  const routerMware = routerMiddleware();
-
-  console.log('store', preloadedState);
+  const routerMware = routerMiddleware(history);
 
   const middleware = [thunkMiddleware, routerMware];
   const isLoggerEnabled =

@@ -41,6 +41,7 @@
     "@babel/runtime": "^7.5.5",
     "@testing-library/react": "^9.1.4",
     "autoprefixer": "^9.6.1",
+    "axios": "^0.19.2",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
     "babel-plugin-css-modules-transform": "^1.6.2",
@@ -105,5 +106,8 @@
   "description": "Yet Another React Redux SSR Boilerplate",
   "main": "index.js",
   "author": "Vladimir Alekseev <v.alekseev@bryce.ru>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "terser-webpack-plugin": "^2.3.5"
+  }
 }

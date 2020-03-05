@@ -6,7 +6,7 @@ export const todoRoutes = () => {
   const todoRoutes = new Router();
 
   todoRoutes.get('/api/todos', (_req, res) => {
-    getList().then(list => {
+    getList(1500).then(list => {
       res.json(list);
     });
   });

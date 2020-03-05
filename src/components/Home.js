@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { api } from '../api';
-import { getList } from '../../server/api/serverTodo';
+import * as serverTodo from '../../server/api/serverTodo';
+import { getList } from '../actions/todos';
 // import * as TODOS_CONST from '../state/serverDataContext';
 
 class Home extends Component {
@@ -18,7 +19,14 @@ class Home extends Component {
   componentDidMount() {
     console.log('did mount', this.props.list.length);
 
-    if (!this.props.list.length) api.todos.all();
+    if (!this.props.list.length) this.props.getList();
+  }
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (nextProps.list !== this.props.list)
+      this.setState({
+        list: nextProps.list
+      });
   }
 
   render() {
@@ -62,11 +70,15 @@ class Home extends Component {
           />
         </form>
 
-        <ul>
-          {list.map(todo => (
-            <li key={todo.id}>{todo.text}</li>
-          ))}
-        </ul>
+        {!!listGetting && <div>Loading</div>}
+
+        {!listGetting && !!list.length && (
+          <ul>
+            {list.map(todo => (
+              <li key={todo.id}>{todo.text}</li>
+            ))}
+          </ul>
+        )}
       </div>
     );
   }
@@ -75,7 +87,7 @@ class Home extends Component {
 Home.fetchData = store => {
   console.log('BEFORE FETCH DATA', store);
 
-  return getList().then(list => {
+  return serverTodo.getList().then(list => {
     console.log('fetch data', list);
 
     store.dispatch({ type: 'GET_TODOS_LIST_SUCCESS', list });
@@ -94,6 +106,8 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  getList
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

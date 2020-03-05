@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import * as serverTodo from '../../server/api/serverTodo';
-import { getList } from '../actions/todos';
+import { createItem, getList } from '../actions/todos';
 import * as TODOS from '../constants/todos';
 
 class Home extends Component {
@@ -42,12 +42,7 @@ class Home extends Component {
               text
             };
 
-            // api.todos.createItem(newTodo).then(res => {
-            //   this.setState({
-            //     list: [...list, res],
-            //     text: ''
-            //   });
-            // });
+            this.props.createItem(newTodo);
           }}
         >
           <label htmlFor="todo">Add a todo</label>
@@ -97,6 +92,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
+  createItem,
   getList
 };
 

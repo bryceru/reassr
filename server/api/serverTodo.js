@@ -8,11 +8,11 @@ export const getList = (timeout = 100) => {
   });
 };
 
-export const createItem = (newTodo = {}) => {
+export const createItem = (item = {}) => {
   return new Promise(function(resolve, reject) {
-    newTodo.id = Date.now();
-    todos.push(newTodo);
+    item.id = Date.now();
+    todos.push(item);
 
-    resolve(newTodo);
+    resolve(item);
   });
 };

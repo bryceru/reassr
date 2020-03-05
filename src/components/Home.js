@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { api } from '../api';
 import * as serverTodo from '../../server/api/serverTodo';
 import { getList } from '../actions/todos';
 import * as TODOS from '../constants/todos';
 
 class Home extends Component {
-  constructor(props, ctx) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -17,8 +16,6 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    console.log('did mount', this.props.list.length);
-
     if (!this.props.list.length) this.props.getList();
   }
 
@@ -33,8 +30,6 @@ class Home extends Component {
     const { text, list = [] } = this.state;
     const { listGetting = false } = this.props;
 
-    console.log('render', list);
-
     return (
       <div>
         <h1>Home page</h1>
@@ -47,12 +42,12 @@ class Home extends Component {
               text
             };
 
-            api.todos.create(newTodo).then(res => {
-              this.setState({
-                list: [...list, res],
-                text: ''
-              });
-            });
+            // api.todos.createItem(newTodo).then(res => {
+            //   this.setState({
+            //     list: [...list, res],
+            //     text: ''
+            //   });
+            // });
           }}
         >
           <label htmlFor="todo">Add a todo</label>
@@ -85,11 +80,7 @@ class Home extends Component {
 }
 
 Home.fetchData = store => {
-  console.log('BEFORE FETCH DATA', store);
-
   return serverTodo.getList().then(list => {
-    console.log('fetch data', list);
-
     store.dispatch({ type: TODOS.GET_LIST_SUCCESS, list });
 
     return {
@@ -99,7 +90,6 @@ Home.fetchData = store => {
 };
 
 const mapStateToProps = state => {
-  console.log('mapStateToProps', state.todos);
   return {
     list: state.todos.list,
     listGetting: state.todos.isGetting

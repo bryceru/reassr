@@ -15,7 +15,6 @@ import { getStore } from '../src/store';
 
 const ServerApp = ({ context, location }) => {
   const store = getStore();
-  console.log('SERVERAPP', store);
 
   return (
     <Provider store={store}>
@@ -29,12 +28,9 @@ const ServerApp = ({ context, location }) => {
 export const renderServerSideApp = (req, res) => {
   const store = getStore();
 
-  console.log('RENDERSERVERSIDEAPP', store);
-
   Loadable.preloadAll()
     .then(() => fetchDataForRender(ServerApp, req, store))
     .then(a => {
-      console.log('LOADABLE', a);
       return renderApp(ServerApp, req, res, store);
     });
 };
@@ -42,8 +38,6 @@ export const renderServerSideApp = (req, res) => {
 function renderApp(ServerApp, req, res, store) {
   const context = {};
   const modules = [];
-
-  console.log('RENDERAPP', store);
 
   const markup = ReactDOMServer.renderToString(
     <Loadable.Capture report={moduleName => modules.push(moduleName)}>

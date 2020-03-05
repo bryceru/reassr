@@ -1,3 +1,5 @@
+import * as TODOS from '../constants/todos';
+
 const initialState = {
   isGetting: false,
   list: []
@@ -10,12 +12,12 @@ const assignTodos = (state, data) =>
 
 export default function todosReducer(state = initialState, action) {
   switch (action.type) {
-    case 'GET_TODOS_LIST_START':
+    case TODOS.GET_LIST_START:
       return assignTodos(state, {
         isGetting: true
       });
 
-    case 'GET_TODOS_LIST_SUCCESS':
+    case TODOS.GET_LIST_SUCCESS:
       return assignTodos(state, {
         list: action.list,
         isGetting: false

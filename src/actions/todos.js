@@ -1,3 +1,4 @@
+import * as TODOS from '../constants/todos';
 import axios from 'axios';
 
 export const getList = () => {
@@ -5,10 +6,10 @@ export const getList = () => {
     try {
       console.log('action get list');
 
-      dispatch({ type: 'GET_TODOS_LIST_START' });
+      dispatch({ type: TODOS.GET_LIST_START });
       const response = await axios.get('/api/todos', { withCredentials: true });
 
-      dispatch({ type: 'GET_TODOS_LIST_SUCCESS', list: response.data });
+      dispatch({ type: TODOS.GET_LIST_SUCCESS, list: response.data });
     } catch (e) {}
   };
 };

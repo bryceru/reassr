@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { api } from '../api';
 import * as serverTodo from '../../server/api/serverTodo';
 import { getList } from '../actions/todos';
-// import * as TODOS_CONST from '../state/serverDataContext';
+import * as TODOS from '../constants/todos';
 
 class Home extends Component {
   constructor(props, ctx) {
@@ -90,7 +90,7 @@ Home.fetchData = store => {
   return serverTodo.getList().then(list => {
     console.log('fetch data', list);
 
-    store.dispatch({ type: 'GET_TODOS_LIST_SUCCESS', list });
+    store.dispatch({ type: TODOS.GET_LIST_SUCCESS, list });
 
     return {
       list

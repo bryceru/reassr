@@ -1,13 +1,14 @@
 Forked from https://github.com/cullenjett/react-ssr-boilerplate/
 
-# React Server Side Rendering Boilerplate ⚛️
+# React Redux Server Side Rendering Boilerplate
 
 Tools like [create-react-app](https://github.com/facebook/create-react-app) have made setting up client-side React apps trivial, but transitioning to SSR is still kind of a pain in the ass. [Next.js](https://nextjs.org) is a powerhouse, and the [Razzle](https://github.com/jaredpalmer/razzle) tool looks like an absolute beast, but sometimes you just want to see the whole enchilada running your app. This is a sample setup for fully featured, server-rendered React applications.
 
 **What's included:**
 
 - Server-side rendering with code splitting (via the excellent [React Loadable](https://github.com/thejameskyle/react-loadable) package)
-- Server-side data fetching and client-side hydration
+- Server-side data fetching (**without** http requests) and client-side hydration
+- Redux (with splitting into actions/constants/reducers)
 - React Router
 - Conditionally load pollyfills -- only ship bloat to outdated browsers
 - React Helmet for dynamic manipulation of the document `<head />`
@@ -20,21 +21,24 @@ Tools like [create-react-app](https://github.com/facebook/create-react-app) have
 - Docker-ized for production like a bawsss
 
 ## Initial setup
-
+### Yarn
+- `yarn`
+### NPM
 - `npm install`
+
 
 ## Development
 
-- `npm start`
+- `yarn start`
   - Start the dev server at [http://localhost:3000](http://localhost:3000)
-- `npm test`
+- `yarn test`
   - Start `jest` in watch mode
 
 ## Production
 
-- `npm run build && npm run start:prod`
+- `yarn build && yarn start:prod`
   - Bundle the JS and fire up the Express server for production
-- `npm run docker`
+- `yarn docker`
   - Build and start a local Docker image in production mode (mostly useful for debugging)
 
 ## General architecture
@@ -63,10 +67,6 @@ Sometimes you'll want to make API calls on the server to fetch data **before** r
 
 Check out `src/components/Home.js` for an example.
 
-#### Add Redux?
-
-Adding `redux` takes a few steps, but shouldn't be too painful; start by replacing the `<ServerDataProvider />` with the `<Provider />` from `react-redux` on both the server and the client. You can then pass the `store` as an argument to the static `fetchData()` method (in `server/fetchDataForRender.js`) and dispatch actions inside of `fetchData()`. Finally you'll need to pass the `store`'s current state to the index.html generator function so you can grab it on the client and hydrate the client-side `store`.
-
 ## Current Quirks
 
 - There are console message saying "componentWillMount has been renamed, and is not recommended for use." due to the react-loadable package. Hopefully React will support SSR with Suspense soon, but until then react-loadable works great and the console messages should not affect your app.
@@ -74,7 +74,4 @@ Adding `redux` takes a few steps, but shouldn't be too painful; start by replaci
 
 ## Roadmap
 
-- [ ] Run server via webpack in dev mode so we can use more loaders
-- [x] Intelligently resolve CSS modules by looking for a `.module.s?css` file extension
-- [ ] Add example app that handles authentication
-- [x] Migrate to `react-testing-library` instead of `enzyme`
+...
